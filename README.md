@@ -1,122 +1,94 @@
-# tic-tac-toe-game
+#Implementation of Two Player Tic-Tac-Toe game in Python.
 
-import random
+    theBoard = {'7': ' ' , '8': ' ' , '9': ' ' ,
+            '4': ' ' , '5': ' ' , '6': ' ' ,
+            '1': ' ' , '2': ' ' , '3': ' ' }
 
+    board_keys = []
 
-board = ["-","-","-",
-         "-","-","-",
-         "-","-","-"]
-currentPlayer = "X"
-winner = None
-gameRunning = True
+    for key in theBoard:
+    board_keys.append(key)
 
-# GAME BOARD
+    def printBoard(board):
+    print(board['7'] + '|' + board['8'] + '|' + board['9'])
+    print('-+-+-')
+    print(board['4'] + '|' + board['5'] + '|' + board['6'])
+    print('-+-+-')
+    print(board['1'] + '|' + board['2'] + '|' + board['3'])
 
-def printBoard(board):
-    print(board[0] + "|" + board[1] + "|" + board[2])
-    print("------")
-    print(board[3] + "|" + board[4] + "|" + board[5])
-    print("------")
-    print(board[6] + "|" + board[7] + "|" + board[8]) 
+# Now we'll write the main function which has all the gameplay functionality.
+def game():
 
-
-#take player input
-
-def playerInput(board):
-    inp = int(input("select a spot 1-9:"))
-    if board[inp-1] == "-":
-        board[inp-1] = currentPlayer
-    else:
-        print("oops player is already in that spot!")    
+    turn = 'X'
+    count = 0
 
 
-#check for win or tie
-def checkHorizontle(board):
-    global winner
-    if board[0] == board[1] == board[2] and board[0] !="-":
-        winner = board[0]
-        return True
-    elif board[3] == board[4] == board[5] and board[3] !="-":
-        winner = board[3]
-        return True
-    elif board[6] == board[7] == board[8] and board[6] !="-":
-        winner = board[6]
-        return True
+    for i in range(10):
+        printBoard(theBoard)
+        print("It's your turn," + turn + ".Move to which place?")
+
+        move = input()        
+
+        if theBoard[move] == ' ':
+            theBoard[move] = turn
+            count += 1
+        else:
+            print("That place is already filled.\nMove to which place?")
+            continue
+
+ # Now we will check if player X or O has won,for every move after 5 moves. 
+        if count >= 5:
+            if theBoard['7'] == theBoard['8'] == theBoard['9'] != ' ': # across the top
+                printBoard(theBoard)
+                print("\nGame Over.\n")                
+                print(" **** " +turn + " won. ****")                
+                break
+            elif theBoard['4'] == theBoard['5'] == theBoard['6'] != ' ': # across the middle
+                printBoard(theBoard)
+                print("\nGame Over.\n")                
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['1'] == theBoard['2'] == theBoard['3'] != ' ': # across the bottom
+                printBoard(theBoard)
+                print("\nGame Over.\n")                
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['1'] == theBoard['4'] == theBoard['7'] != ' ': # down the left side
+                printBoard(theBoard)
+                print("\nGame Over.\n")                
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['2'] == theBoard['5'] == theBoard['8'] != ' ': # down the middle
+                printBoard(theBoard)
+                print("\nGame Over.\n")                
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['3'] == theBoard['6'] == theBoard['9'] != ' ': # down the right side
+                printBoard(theBoard)
+                print("\nGame Over.\n")                
+                print(" **** " +turn + " won. ****")
+                break 
+            elif theBoard['7'] == theBoard['5'] == theBoard['3'] != ' ': # diagonal
+                printBoard(theBoard)
+                print("\nGame Over.\n")                
+                print(" **** " +turn + " won. ****")
+                break
+            elif theBoard['1'] == theBoard['5'] == theBoard['9'] != ' ': # diagonal
+                printBoard(theBoard)
+                print("\nGame Over.\n")                
+                print(" **** " +turn + " won. ****")
+                break 
+
+ # If neither X nor O wins and the board is full, we'll declare the result as 'tie'.
+        if count == 9:
+            print("\nGame Over.\n")                
+            print("It's a Tie!!")
+
+ # Now we have to change the player after every move.
+        if turn =='X':
+            turn = 'O'
+        else:
+            turn = 'X'        
     
-
-def checkRow(board):
-    global winner
-    if board[0] == board[3] == board[6] and board[0] !="-":
-        winner = board[0]
-        return True
-    elif board[1] == board[4] == board[7] and board[1] !="-":
-        winner = board[2]
-        return True
-    elif board[2] == board[5] == board[8] and board[2] !="-":
-        winner = board[3]
-        return True
-    
-
-def checkDiag(board):
-    global winner 
-    if board[0] == board[4] == board[8] and board[0] !="-":
-        winner = board[0]
-        return True
-    elif board[2] == board[4] == board[6] and board[4] !="-":
-        winner = board[2]
-        return True
-
-def checkIfWin(board):
-    global gameRunning
-    if checkHorizontle(board):
-        printBoard(board)
-        print(f"the winner is {winner}!")
-        gameRunning = False
-
-    elif checkRow(board):
-        printBoard(board)
-        print(f"the winner is {winner}!")
-        gameRunning = False
-
-    elif checkDiag(board):
-        printBoard(board)
-        print(f"the winner is {winner}!")
-        gameRunning = False    
-
-
-def checkIfTie(board):
-    global gameRunning
-    if "-" not in board:
-        printBoard(board)
-        print("it is a tie!")
-        gameRunning = False
-     
-        
-# switch the player
-def switchplayer():
-    global currentPlayer
-    if currentPlayer == "X":
-       currentPlayer == "O"
-    else:
-        currentPlayer == "X"  
-
-# computer 
-def computer(board):
-    while currentPlayer == "O":
-        position = random.randint(0,8)
-        if board[position] == "-":
-            board[position] == "O"
-            switchplayer()
-
-
-#check for win or tie again
-
-while gameRunning:
-    printBoard(board)
-    playerInput(board)
-    checkIfWin(board)
-    checkIfTie(board)
-    switchplayer()
-    computer(board)
-    checkIfWin(board)
-    checkIfTie(board)
+    if __name__ == "__main__":
+    game()
